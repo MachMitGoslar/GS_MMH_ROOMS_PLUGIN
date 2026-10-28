@@ -1,0 +1,42 @@
+{
+  "name": "machmitgoslar/gs-mmh-rooms-plugin",
+  "description": "Kirby plugin for room booking at MachMit!Haus Goslar (rooms, booking requests, availability)",
+  "type": "kirby-plugin",
+  "license": "gpl-3.0",
+  "homepage": "https://mmh.goslar.de",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "Nantke Janssen, Martin Sänger",
+      "email": "machmit@goslar.de"
+    }
+  ],
+  "minimum-stability": "RC",
+  "require": {
+    "php": ">=8.3.0",
+    "getkirby/composer-installer": "^1.2.1"
+  },
+  "scripts": {
+    "dist": "composer install --no-dev --optimize-autoloader",
+    "test": "phpunit",
+    "format": "php-cs-fixer fix --diff",
+    "format:check": "php-cs-fixer fix --diff --dry-run",
+    "lint": "php -d memory_limit=512M ./vendor/bin/phpcs --standard=phpcs.xml",
+    "lint:fix": "php -d memory_limit=512M ./vendor/bin/phpcbf --standard=phpcs.xml"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "getkirby/composer-installer": true
+    }
+  },
+  "extra": {
+    "kirby-cms-path": false
+  },
+  "require-dev": {
+    "getkirby/cms": "^5",
+    "friendsofphp/php-cs-fixer": "^3.40",
+    "squizlabs/php_codesniffer": "^3.8",
+    "phpunit/phpunit": "^10.5"
+  }
+}

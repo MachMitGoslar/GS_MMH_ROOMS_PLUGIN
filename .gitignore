@@ -1,0 +1,10 @@
+# PHP tooling
+vendor/
+composer.lock
+.phpunit.cache/
+.php-cs-fixer.cache
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store

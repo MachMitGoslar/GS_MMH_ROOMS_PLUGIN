@@ -1,0 +1,42 @@
+title: Buchungsanfragen
+icon: calendar
+options:
+  changeStatus: false
+  changeSlug: false
+  changeTitle: false
+  delete: false
+
+columns:
+  - width: 1/1
+    sections:
+      info:
+        type: info
+        theme: notice
+        text: |
+          **Hinweis:** Diese Seite dient als Container für alle Buchungsanfragen.
+          Die Verwaltung erfolgt über die Räume-Seite im Tab "Buchungsanfragen".
+
+      requests:
+        type: pages
+        label: Alle Anfragen
+        template: booking-request
+        query: site.find('rooms/booking-requests').children
+        status: all
+        sortBy: created_at desc
+        layout: table
+        columns:
+          requester_name:
+            label: Name
+            width: 1/6
+          requested_rooms:
+            label: Räume
+            width: 1/6
+          request_date:
+            label: Datum
+            width: 1/6
+          request_time_start:
+            label: Zeit
+            width: 1/6
+          status:
+            label: Status
+            width: 1/6

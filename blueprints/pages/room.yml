@@ -1,0 +1,343 @@
+title: Raum
+icon: box
+status:
+  draft:
+    label: Entwurf
+    text: Raum ist nicht öffentlich sichtbar
+  listed:
+    label: Verfügbar
+    text: Raum ist buchbar und sichtbar
+
+tabs:
+  content:
+    label: Inhalt
+    icon: text
+    columns:
+      - width: 2/3
+        sections:
+          main:
+            type: fields
+            fields:
+              cover:
+                extends: fields/cover
+                label: Hauptbild
+                help: Repräsentatives Bild des Raumes
+
+              title:
+                label: Raumname
+                type: text
+                required: true
+                placeholder: z.B. "Projektraum"
+
+              slug_info:
+                type: info
+                theme: none
+                text: "URL: /rooms/{{ page.slug }}"
+
+              short_description:
+                label: Kurzbeschreibung
+                type: textarea
+                maxlength: 200
+                help: Kurze Beschreibung für Übersichtsseiten (max. 200 Zeichen)
+
+              description:
+                label: Ausführliche Beschreibung
+                type: blocks
+                fieldsets:
+                  heading:
+                    extends: blocks/heading
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  text:
+                    extends: blocks/text
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  image:
+                    extends: blocks/image
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  gallery:
+                    extends: blocks/gallery
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  list:
+                    extends: blocks/list
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  quote:
+                    extends: blocks/quote
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  divider:
+                    extends: blocks/divider
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                help: Detaillierte Beschreibung des Raumes
+
+          gallery_section:
+            type: fields
+            fields:
+              gallery:
+                label: Bildergalerie
+                type: files
+                layout: cards
+                size: small
+                uploads: true
+                multiple: true
+                accepts:
+                  - image/jpeg
+                  - image/png
+                  - image/webp
+                help: Weitere Bilder des Raumes
+
+              virtual_tour_url:
+                label: 360°-Tour URL
+                type: url
+                placeholder: https://my.matterport.com/show/?m=...
+                help: Link zu einer virtuellen Tour (z.B. Matterport)
+
+      - width: 1/3
+        sections:
+          details:
+            type: fields
+            fields:
+              capacity:
+                label: Kapazität
+                type: number
+                min: 1
+                max: 500
+                required: true
+                after: Personen
+                help: Maximale Personenzahl
+
+              area:
+                label: Fläche
+                type: number
+                min: 1
+                after: m²
+                help: Raumgröße in Quadratmetern
+
+              floor:
+                label: Etage
+                type: select
+                options:
+                  eg: Erdgeschoss
+                  og1: 1. Obergeschoss
+                  og2: 2. Obergeschoss
+                  ug: Untergeschoss
+                default: eg
+
+              accessible:
+                label: Barrierefrei
+                type: toggle
+                default: false
+                text:
+                  - Nein
+                  - Ja
+
+          equipment_section:
+            type: fields
+            fields:
+              equipment:
+                label: Ausstattung
+                type: structure
+                fields:
+                  name:
+                    label: Bezeichnung
+                    type: text
+                    width: 2/3
+                    required: true
+                  icon:
+                    label: Icon
+                    type: select
+                    width: 1/3
+                    options:
+                      monitor: Bildschirm/Beamer
+                      wifi: WLAN
+                      mic: Mikrofon/Audio
+                      video: Videokonferenz
+                      whiteboard: Whiteboard
+                      flipchart: Flipchart
+                      printer: Drucker
+                      coffee: Küche/Getränke
+                      ac: Klimaanlage
+                      wheelchair: Barrierefreiheit
+                      parking: Parkplatz
+                      other: Sonstiges
+                    default: other
+                  included:
+                    label: Inklusive
+                    type: toggle
+                    width: 1/2
+                    default: true
+                    text:
+                      - Gegen Aufpreis
+                      - Inklusive
+                help: Verfügbare Ausstattung im Raum
+
+  pricing:
+    label: Preise
+    icon: credit-card
+    columns:
+      - width: 1/2
+        sections:
+          pricing_fields:
+            type: fields
+            fields:
+              pricing_enabled:
+                label: Kostenpflichtig
+                type: toggle
+                default: false
+                text:
+                  - Kostenlos
+                  - Kostenpflichtig
+                help: Ist die Raumnutzung kostenpflichtig?
+
+              pricing_info:
+                type: info
+                theme: notice
+                text: |
+                  **Hinweis:** Die Preisanzeige ist informativ.
+                  Eine Zahlungsabwicklung ist nicht integriert.
+                when:
+                  pricing_enabled: true
+
+              hourly_rate:
+                label: Stundenpreis
+                type: number
+                min: 0
+                step: 0.5
+                after: €/Stunde
+                when:
+                  pricing_enabled: true
+
+              half_day_rate:
+                label: Halbtagespreis
+                type: number
+                min: 0
+                step: 0.5
+                after: € (bis 4 Std.)
+                when:
+                  pricing_enabled: true
+
+              full_day_rate:
+                label: Tagespreis
+                type: number
+                min: 0
+                step: 0.5
+                after: € (ganzer Tag)
+                when:
+                  pricing_enabled: true
+
+      - width: 1/2
+        sections:
+          pricing_notes:
+            type: fields
+            fields:
+              pricing_notes:
+                label: Preishinweise
+                type: textarea
+                help: Zusätzliche Informationen zu Preisen, Rabatten, etc.
+                when:
+                  pricing_enabled: true
+
+              nonprofit_discount:
+                label: Gemeinnützigen-Rabatt
+                type: toggle
+                default: false
+                text:
+                  - Kein Rabatt
+                  - Rabatt verfügbar
+                when:
+                  pricing_enabled: true
+
+              nonprofit_discount_percent:
+                label: Rabatt für Gemeinnützige
+                type: number
+                min: 0
+                max: 100
+                after: "%"
+                when:
+                  pricing_enabled: true
+                  nonprofit_discount: true
+
+  calendar:
+    label: Kalender
+    icon: calendar
+    columns:
+      - width: 1/2
+        sections:
+          calendar_settings:
+            type: fields
+            fields:
+              calendar_info:
+                type: info
+                theme: info
+                text: |
+                  **Kalender-Integration**
+
+                  Verbinden Sie einen Google Calendar, um die Verfügbarkeit dieses Raumes anzuzeigen.
+                  Der Kalender wird öffentlich auf der Raumseite eingebettet.
+
+              google_calendar_id:
+                label: Google Calendar ID
+                type: text
+                placeholder: abc123@group.calendar.google.com
+                help: Die Calendar-ID aus den Google Calendar Einstellungen
+
+              ical_url:
+                label: iCal Feed URL
+                type: url
+                placeholder: https://calendar.google.com/calendar/ical/.../basic.ics
+                help: Öffentliche iCal-URL für den Kalender-Feed
+
+      - width: 1/2
+        sections:
+          calendar_display:
+            type: fields
+            fields:
+              calendar_embed_url:
+                label: Kalender Embed-URL
+                type: url
+                placeholder: https://calendar.google.com/calendar/embed?src=...
+                help: URL zum Einbetten des Kalenders (iframe)
+
+              show_calendar:
+                label: Kalender anzeigen
+                type: toggle
+                default: true
+                text:
+                  - Versteckt
+                  - Sichtbar
+
+  files:
+    label: Dateien
+    sections:
+      files:
+        type: files
+        layout: cards
+        size: small
+        uploads: true
+
+  seo: tabs/seo

@@ -1,0 +1,230 @@
+title: Buchungsanfrage
+icon: calendar
+num: "{{ page.request_date.toDate('Ymd') }}_{{ page.slug }}"
+
+# Status represents the booking state
+# draft = pending (awaiting review)
+# listed = approved
+# unlisted = denied
+status:
+  draft:
+    label: Ausstehend
+    text: Anfrage wartet auf Bearbeitung
+  unlisted:
+    label: Abgelehnt
+    text: Anfrage wurde abgelehnt
+  listed:
+    label: Genehmigt
+    text: Anfrage wurde genehmigt
+
+options:
+  changeTemplate: false
+  changeSlug: false
+
+columns:
+  - width: 2/3
+    sections:
+      request_details:
+        type: fields
+        fields:
+          request_status_info:
+            type: info
+            label: Status
+            theme: "{{ page.status == 'draft' ? 'notice' : (page.status == 'listed' ? 'positive' : 'negative') }}"
+            text: |
+              {{ page.status == 'draft' ? '⏳ Diese Anfrage wartet auf Bearbeitung.' : '' }}
+              {{ page.status == 'listed' ? '✅ Diese Anfrage wurde genehmigt.' : '' }}
+              {{ page.status == 'unlisted' ? '❌ Diese Anfrage wurde abgelehnt.' : '' }}
+
+          line1:
+            type: line
+
+          headline_requester:
+            type: info
+            label: Anfragende Person
+            theme: none
+            text: "**Kontaktdaten**"
+
+          requester_name:
+            label: Name
+            type: text
+            required: true
+            width: 1/2
+            disabled: true
+
+          requester_email:
+            label: E-Mail
+            type: email
+            required: true
+            width: 1/2
+            disabled: true
+
+          requester_phone:
+            label: Telefon
+            type: tel
+            width: 1/2
+            disabled: true
+
+          requester_organization:
+            label: Organisation
+            type: text
+            width: 1/2
+            disabled: true
+
+          line2:
+            type: line
+
+          headline_booking:
+            type: info
+            label: Buchungsdetails
+            theme: none
+            text: "**Gewünschte Buchung**"
+
+          requested_rooms:
+            label: Gewünschte Räume
+            type: pages
+            query: site.find('raeume').children.listed
+            multiple: true
+            disabled: true
+            layout: list
+            info: "{{ page.capacity }} Personen"
+
+          request_date:
+            label: Datum
+            type: date
+            required: true
+            width: 1/3
+            disabled: true
+
+          request_time_start:
+            label: Von
+            type: time
+            required: true
+            width: 1/3
+            step: 15
+            disabled: true
+
+          request_time_end:
+            label: Bis
+            type: time
+            required: true
+            width: 1/3
+            step: 15
+            disabled: true
+
+          is_recurring:
+            label: Wiederkehrend
+            type: toggle
+            width: 1/3
+            disabled: true
+            text:
+              - Einmalig
+              - Wiederkehrend
+## TODO: Recurring is not yet fully implemented. Missing cases (ex:): every second thursday, every last friday, every 3 months, etc.
+          recurrence_pattern:
+            label: Wiederholung
+            type: select
+            width: 1/3
+            disabled: true
+            options:
+              weekly: Wöchentlich
+              biweekly: Alle 2 Wochen
+              monthly: Monatlich
+            when:
+              is_recurring: true
+
+          recurrence_end_date:
+            label: Bis (Enddatum)
+            type: date
+            width: 1/3
+            disabled: true
+            when:
+              is_recurring: true
+
+          expected_attendees:
+            label: Erwartete Teilnehmer
+            type: number
+            width: 1/3
+            disabled: true
+            after: Personen
+
+          purpose:
+            label: Verwendungszweck
+            type: textarea
+            disabled: true
+            help: Beschreibung der geplanten Veranstaltung/Nutzung
+
+          special_requirements:
+            label: Besondere Anforderungen
+            type: textarea
+            disabled: true
+            help: Spezielle Wünsche oder Anforderungen
+
+  - width: 1/3
+    sections:
+      admin_section:
+        type: fields
+        fields:
+          admin_headline:
+            type: info
+            label: Admin-Bereich
+            theme: info
+            text: "**Bearbeitung**"
+
+          admin_notes:
+            label: Interne Notizen
+            type: textarea
+            help: Notizen zur Anfrage (nicht sichtbar für Anfragende)
+
+          denial_reason:
+            label: Ablehnungsgrund
+            type: textarea
+            help: Grund für die Ablehnung (wird in E-Mail verwendet)
+            when:
+              - status: unlisted
+
+          processed_at:
+            label: Bearbeitet am
+            type: date
+            time: true
+            disabled: true
+
+          processed_by:
+            label: Bearbeitet von
+            type: users
+            max: 1
+            disabled: true
+
+          calendar_event_added:
+            label: Kalendereintrag erstellt
+            type: toggle
+            default: false
+            text:
+              - Nein
+              - Ja
+            help: Wurde der Termin im Google Calendar eingetragen?
+
+      meta_section:
+        type: fields
+        fields:
+          meta_headline:
+            type: info
+            label: Metadaten
+            theme: none
+            text: "**Anfrage-Info**"
+
+          created_at:
+            label: Eingegangen am
+            type: date
+            time: true
+            disabled: true
+
+          ip_address:
+            label: IP-Adresse
+            type: text
+            disabled: true
+
+          user_agent:
+            label: Browser
+            type: text
+            disabled: true

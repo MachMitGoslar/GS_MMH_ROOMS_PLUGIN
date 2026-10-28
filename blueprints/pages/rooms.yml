@@ -1,0 +1,265 @@
+title: Räume
+icon: box
+options:
+  changeStatus: false
+
+tabs:
+  content:
+    label: Inhalt
+    icon: text
+    columns:
+      - width: 2/3
+        sections:
+          fields:
+            type: fields
+            fields:
+              cover:
+                extends: fields/cover
+                label: Hero-Bild
+                help: Hauptbild für die Räume-Übersicht
+
+              title:
+                label: Titel
+                type: text
+                default: Unsere Räume
+
+              headline:
+                label: Überschrift
+                type: text
+                placeholder: z.B. "Räume im MachMit!Haus"
+
+              subheadline:
+                label: Untertitel
+                type: text
+                placeholder: z.B. "Flexible Räume für Ihre Ideen"
+
+              description:
+                label: Einleitung
+                type: blocks
+                fieldsets:
+                  heading:
+                    extends: blocks/heading
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  text:
+                    extends: blocks/text
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  list:
+                    extends: blocks/list
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  divider:
+                    extends: blocks/divider
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                help: Einleitungstext für die Räume-Seite
+
+              booking_info:
+                label: Buchungshinweise
+                type: blocks
+                fieldsets:
+                  heading:
+                    extends: blocks/heading
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  text:
+                    extends: blocks/text
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  list:
+                    extends: blocks/list
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                  divider:
+                    extends: blocks/divider
+                    fields:
+                      publish_date:
+                        extends: fields/blockPublishDate
+                      end_date:
+                        extends: fields/blockEndDate
+                help: Allgemeine Informationen zur Raumbuchung (Vorlaufzeit, Bedingungen, etc.)
+              
+              show_calendar_overview:
+                label: Kalenderübersicht anzeigen
+                type: toggle
+                default: true
+                text:
+                  - Deaktiviert
+                  - Aktiviert
+                help: Zeigt eine Kalenderübersicht aller gebuchten Termine an
+              
+              overview_calendar_url:
+                label: Externe Kalender-URL
+                type: url
+                help: URL zu einem externen Kalender (z.B. Google Calendar) für die Kalenderübersicht
+
+      - width: 1/3
+        sections:
+          info:
+            type: info
+            label: Hinweis
+            theme: positive
+            text: |
+              **Räume verwalten**
+
+              Erstellen Sie für jeden Raum eine Unterseite mit dem Template "Raum".
+
+              **Buchungsanfragen**
+
+              Alle eingehenden Buchungsanfragen finden Sie im Tab "Anfragen".
+
+  rooms:
+    label: Räume
+    icon: grid
+    columns:
+      - width: 1/1
+        sections:
+          rooms_list:
+            type: pages
+            label: Verfügbare Räume
+            template: room
+            status: all
+            layout: cards
+            size: medium
+            image:
+              query: page.cover.toFile
+              cover: true
+              ratio: 3/2
+            info: "{{ page.capacity }} Personen"
+            empty: Noch keine Räume angelegt
+
+  requests:
+    label: Buchungsanfragen
+    icon: calendar
+    columns:
+      - width: 1/3
+        sections:
+          pending:
+            type: pages
+            label: Ausstehend
+            parent: site.find('rooms/booking-requests')
+            template: booking-request
+            status: draft
+            sortBy: request_date asc
+            layout: list
+            limit: 10
+            size: small
+            info: "{{ page.request_date.toDate('d.m.Y') }} - {{ page.requester_name }}"
+            empty: Keine ausstehenden Anfragen
+      - width: 1/3
+        sections:
+          approved:
+            type: pages
+            label: Genehmigt
+            parent: site.find('rooms/booking-requests')
+            template: booking-request
+            status: listed
+            sortBy: request_date desc
+            layout: list
+            size: small
+            limit: 10
+            info: "{{ page.request_date.toDate('d.m.Y') }} - {{ page.requester_name }}"
+            empty: Keine genehmigten Anfragen
+      - width: 1/3
+        sections:
+          denied:
+            type: pages
+            label: Abgelehnt
+            parent: site.find('rooms/booking-requests')
+            template: booking-request
+            status: unlisted
+            sortBy: request_date desc
+            layout: list
+            size: small
+            limit: 10
+            info: "{{ page.request_date.toDate('d.m.Y') }} - {{ page.requester_name }}"
+            empty: Keine abgelehnten Anfragen
+
+  settings:
+    label: Einstellungen
+    icon: settings
+    columns:
+      - width: 1/2
+        sections:
+          booking_settings:
+            type: fields
+            fields:
+              lead_time_days:
+                label: Vorlaufzeit (Tage)
+                type: number
+                default: 1
+                min: 0
+                max: 30
+                help: Mindestanzahl Tage vor dem gewünschten Termin
+
+              max_future_days:
+                label: Max. Vorausbuchung (Tage)
+                type: number
+                default: 90
+                min: 7
+                max: 365
+                help: Wie weit im Voraus kann gebucht werden?
+
+              time_slot_minutes:
+                label: Zeitraster (Minuten)
+                type: select
+                default: "15"
+                options:
+                  "15": 15 Minuten
+                  "30": 30 Minuten
+                  "60": 60 Minuten
+                help: Buchbare Zeiteinheiten
+
+              opening_time:
+                label: Öffnungszeit
+                type: time
+                default: "08:00"
+                step: 15
+
+              closing_time:
+                label: Schließzeit
+                type: time
+                default: "22:00"
+                step: 15
+
+      - width: 1/2
+        sections:
+          notification_settings:
+            type: fields
+            fields:
+              notification_email:
+                label: Benachrichtigungs-E-Mail
+                type: email
+                help: E-Mail-Adresse für Buchungsbenachrichtigungen (Absender und Admin-Empfänger)
+
+              notification_enabled:
+                label: E-Mail-Benachrichtigungen
+                type: toggle
+                default: true
+                text:
+                  - Deaktiviert
+                  - Aktiviert
+
+  seo: tabs/seo
