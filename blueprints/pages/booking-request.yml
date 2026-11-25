@@ -179,9 +179,9 @@ columns:
           denial_reason:
             label: Ablehnungsgrund
             type: textarea
-            help: Grund für die Ablehnung (wird in E-Mail verwendet)
-            when:
-              - status: unlisted
+            # Kirby's `when` cannot see the page status (and ignores lists), so the
+            # field is always shown; the help says when it matters.
+            help: Nur bei Ablehnung – vor dem Ablehnen eintragen und speichern, der Text erscheint in der Absage-E-Mail.
 
           processed_at:
             label: Bearbeitet am
